@@ -21,16 +21,14 @@
 
 
 module Subset(
-        input clk,
-        input rst,
-        input en,
         input [23:0] central,
         input [23:0] radius_square,
         input [1:0] mode,
         input [7:0] position, // fixed from module outside
-        output valid,
         output activated,
     );
+
+    /* pure combinational circuit , no clock or reset */ 
 
     // seperate the central wire
     wire [3:0] central_xA;    
@@ -45,9 +43,15 @@ module Subset(
     assign central_xB = central[15:12];    
     assign central_yB = central[11:8];    
     assign central_xC = central[9:4];    
-    assign central_yC = central[3:0];    
+    assign central_yC = central[3:0];  
+
+
+    // calculate distance (without square root)
+
+    // compare with radius_square
+
+    // determine if the point is activated  
 
     
-
 
 endmodule

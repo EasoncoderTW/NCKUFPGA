@@ -32,28 +32,28 @@ module SET(
     output valid,
     output [7:0] candidate
     );
-    
+    // output reg
     reg valid;
 
-    // conbination - square of radius
+    // conbinational - square of radius
     wire [8:0] r1_sq;
     wire [8:0] r2_sq;
     wire [8:0] r3_sq;
     
-    
-
-    // 8*8 subset
+    // conbinational - 8*8 subset
     Subset  subsets[63:0] ();
 
+    // conbinational - activated counter (64 to 1 adder tree)
+
+    // sequential - controller
     always @(posedge clk or rst) begin
         if(rst) begin
             valid <= 1'b0;
             candidate <= 8'b0; // clear output
         end
         else begin
-            
+            // TBD
         end
     end
-    
     
 endmodule

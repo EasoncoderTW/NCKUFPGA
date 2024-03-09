@@ -36,12 +36,27 @@ module SET(
     reg valid;
 
     // conbinational - square of radius
-    wire [8:0] r1_sq;
-    wire [8:0] r2_sq;
-    wire [8:0] r3_sq;
-    
+    wire [3:0] r1, r2, r3;
+    wire [7:0] r1_sq, r2_sq, r3_sq;
+
+    assign r1_sq = r1 * r1;
+    assign r2_sq = r2 * r2;
+    assign r3_sq = r3 * r3;
+
     // conbinational - 8*8 subset
-    Subset  subsets[63:0] ();
+    generate
+        genvar i;
+        for (i=0; i<63; i=i+1) begin : subsets_gen
+            Subset i_subsets(
+            .central(central),
+            .radius_square({r1_sq,r2_sq,r3_sq}),
+            .mode(mode),
+            .position_x(i/8),
+            .position_y(i%8),
+            .ctivated(activated),
+            );
+        end
+    endgenerate
 
     // conbinational - activated counter (64 to 1 adder tree)
 

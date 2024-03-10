@@ -96,7 +96,7 @@ module SET(
     assign partial_candidate = partial_candidate_5 + partial_candidate_4;
 
 
-    assign busy_next = (en)?1'b1:((valid)?1'b0:1'b1); // after en: high,  after valid: low
+    assign busy_next = ((~busy)&en)?1'b1:((valid & busy)?1'b0:busy); // after en: high,  after valid: low
     assign valid_next = (busy & (position_y==4'd8))? 1'b1:1'b0;
     assign position_y_next = (valid_next | (~busy))? 4'd1: (position_y + 4'd1);
     assign candidate_next = (busy & (~valid))?(candidate + {4'd0,partial_candidate}): 8'd0;

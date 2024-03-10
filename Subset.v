@@ -1,4 +1,3 @@
-`timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: 
@@ -50,9 +49,18 @@ module Subset(
 
     // calculate distance (without square root)
     wire [7:0] distance_A,distance_B,distance_C;
-    assign distance_A = $signed($signed(central_xA)-$signed(position_x))*$signed($signed(central_xA)-$signed(position_x)) + $signed($signed(central_yA)-$signed(position_y))*$signed($signed(central_yA)-$signed(position_y));
-    assign distance_B = $signed($signed(central_xB)-$signed(position_x))*$signed($signed(central_xB)-$signed(position_x)) + $signed($signed(central_yB)-$signed(position_y))*$signed($signed(central_yB)-$signed(position_y));
-    assign distance_C = $signed($signed(central_xC)-$signed(position_x))*$signed($signed(central_xC)-$signed(position_x)) + $signed($signed(central_yC)-$signed(position_y))*$signed($signed(central_yC)-$signed(position_y));
+    wire [3:0] delta_AX,delta_AY,delta_BX,delta_BY,delta_CX,delta_CY;
+
+    assign delta_AX = (central_xA > position_x)?(central_xA - position_x):(position_x - central_xA);
+    assign delta_AY = (central_yA > position_y)?(central_yA - position_y):(position_y - central_yA);
+    assign delta_BX = (central_xB > position_x)?(central_xB - position_x):(position_x - central_xB);
+    assign delta_BY = (central_yB > position_y)?(central_yB - position_y):(position_y - central_yB);
+    assign delta_CX = (central_xC > position_x)?(central_xC - position_x):(position_x - central_xC);
+    assign delta_CY = (central_yC > position_y)?(central_yC - position_y):(position_y - central_yC);
+
+    assign distance_A = (delta_AX*delta_AX) + (delta_AY*delta_AY);
+    assign distance_B = (delta_BX*delta_BX) + (delta_BY*delta_BY);
+    assign distance_C = (delta_CX*delta_CX) + (delta_CY*delta_CY);
 
     // compare with radius_square
     wire include_A,include_B,include_C;

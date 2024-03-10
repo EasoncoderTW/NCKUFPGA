@@ -24,8 +24,8 @@ module Subset(
         input [23:0] central,
         input [23:0] radius_square,
         input [1:0] mode,
-        input [4:0] position_x, // fixed from module outside
-        input [4:0] position_y, // fixed from module outside
+        input [3:0] position_x, // fixed from module outside
+        input [3:0] position_y, // fixed from module outside
         output activated,
     );
 

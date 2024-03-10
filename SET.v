@@ -54,6 +54,14 @@ module SET(
     assign r2_sq = r2 * r2;
     assign r3_sq = r3 * r3;
 
+    
+    // next state
+    reg [3:0] position_y;
+    wire [3:0] position_y_next;
+    wire valid_next;
+    wire busy_next;
+    wire [7:0] candidate_next;
+
     // conbinational - 8 subset
     wire [7:0] activated;
     generate
@@ -63,9 +71,9 @@ module SET(
             .central(central_reg),
             .radius_square({r1_sq,r2_sq,r3_sq}),
             .mode(mode_reg),
-            .position_x(i),
+            .position_x(i+4'd1),
             .position_y(position_y),
-            .activated(activated[i]),
+            .activated(activated[i])
             );
         end
     endgenerate
@@ -87,24 +95,18 @@ module SET(
     assign partial_candidate_5 = partial_candidate_3 + partial_candidate_2;
     assign partial_candidate = partial_candidate_5 + partial_candidate_4;
 
-    // next state
-    reg [3:0] position_y;
-    wire [3:0] position_y_next;
-    wire valid_next;
-    wire busy_next;
-    wire [7:0] candidate_next;
 
     assign busy_next = (en)?1'b1:((valid)?1'b0:1'b1); // after en: high,  after valid: low
-    assign valid_next = (busy & (position_y==4'd7))? 1'b1:1'b0;
-    assign position_y_next = (valid_next | (~busy))? 4'd0: (position_y + 4'd1);
-    assign candidate_next = (busy & (~valid))?(candidate_next + {4'd0,partial_candidate}): 8'd0;
+    assign valid_next = (busy & (position_y==4'd8))? 1'b1:1'b0;
+    assign position_y_next = (valid_next | (~busy))? 4'd1: (position_y + 4'd1);
+    assign candidate_next = (busy & (~valid))?(candidate + {4'd0,partial_candidate}): 8'd0;
     
     // sequential - controller
     always @(posedge clk or rst) begin
         if(rst) begin
             valid <= 1'b0;
             candidate <= 8'b0; // clear output
-            position_y <= 4'd0;
+            position_y <= 4'd1;
             busy <= 1'b0;
             // input reg
             central_reg <= 24'd0;

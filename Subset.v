@@ -26,7 +26,7 @@ module Subset(
         input [1:0] mode,
         input [3:0] position_x, // fixed from module outside
         input [3:0] position_y, // fixed from module outside
-        output activated,
+        output activated
     );
 
     /* pure combinational circuit , no clock or reset */ 
@@ -50,15 +50,15 @@ module Subset(
 
     // calculate distance (without square root)
     wire [7:0] distance_A,distance_B,distance_C;
-    assign distance_A = (central_xA-position_x)*(central_xA-position_x) + (central_yA-position_y)*(central_yA-position_y);
-    assign distance_B = (central_xB-position_x)*(central_xB-position_x) + (central_yB-position_y)*(central_yB-position_y);
-    assign distance_C = (central_xC-position_x)*(central_xC-position_x) + (central_yC-position_y)*(central_yC-position_y);
+    assign distance_A = $signed($signed(central_xA)-$signed(position_x))*$signed($signed(central_xA)-$signed(position_x)) + $signed($signed(central_yA)-$signed(position_y))*$signed($signed(central_yA)-$signed(position_y));
+    assign distance_B = $signed($signed(central_xB)-$signed(position_x))*$signed($signed(central_xB)-$signed(position_x)) + $signed($signed(central_yB)-$signed(position_y))*$signed($signed(central_yB)-$signed(position_y));
+    assign distance_C = $signed($signed(central_xC)-$signed(position_x))*$signed($signed(central_xC)-$signed(position_x)) + $signed($signed(central_yC)-$signed(position_y))*$signed($signed(central_yC)-$signed(position_y));
 
     // compare with radius_square
     wire include_A,include_B,include_C;
-    assign include_A = (distance_A < radius_square_A);
-    assign include_B = (distance_C < radius_square_B);
-    assign include_C = (distance_B < radius_square_C);
+    assign include_A = (distance_A <= radius_square_A);
+    assign include_B = (distance_B <= radius_square_B);
+    assign include_C = (distance_C <= radius_square_C);
 
     // determine if the point is activated  
 

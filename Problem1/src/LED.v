@@ -1,6 +1,6 @@
 
 module LED(
-    input   clk ,
+    input   clk ,  //2Hz
     input   rst ,
     input   [1:0] sw    ,
     output  reg  led4_b ,

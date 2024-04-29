@@ -7,11 +7,12 @@ module Sorting (
     output wire valid
 );
 
-parameter Sidle = 1'd0,
-          Swork = 1'd1;
+parameter Sidle = 2'd0,
+          Swork = 2'd1,
+          Sdone = 2'd2;
 
-reg state;
-reg state_next;
+reg [1:0]state;
+reg [1:0]state_next;
 
 reg [3:0] counter;
 reg [3:0] sorted_count;
@@ -34,19 +35,24 @@ assign out = {
     data[7],data[6],data[5],data[4],data[3],data[2],data[1],data[0]
 };
 
-assign valid = (state == Swork && sorted_count == 4'd7)?1'b1:1'b0;
+assign valid = (state == Sdone)?1'b1:1'b0;
+
+wire done = (state == Swork && sorted_count == 4'd7)?1'b1:1'b0;
+wire s_init = (state == Sidle && enable)?1'b1:1'b0;
+wire readout = (state == Sdone && !enable)?1'b1:1'b0;
 
 always @(posedge clk) begin
     if(rst) begin
         sorted_count <= 4'b0;
     end
+    else if (done) begin
+        sorted_count <= 4'b0;
+    end 
     else if(state == Swork) begin
         if(sorted_count < 4'd7 && counter == 4'd0) begin
             sorted_count <= sorted_count + 4'd1;
         end 
-        else if (valid) begin
-            sorted_count <= 4'b0;
-        end else begin
+        else begin
             sorted_count <= sorted_count;
         end
     end
@@ -59,13 +65,11 @@ always @(posedge clk) begin
     if(rst) begin
         counter <= 4'b0;
     end
-    else if(enable && state == Sidle) begin
+    else if(s_init) begin
         counter <= 4'd7;
-    end 
+    end
     else if(state == Swork) begin
-        if(sorted_count >= 4'd7) begin
-             counter <= 4'b0;
-        end else if(counter == 4'd0) begin
+        if(counter == 4'd0) begin
             counter <= 4'd7 - sorted_count;
         end else begin
             counter <= counter - 4'd1;
@@ -87,7 +91,8 @@ end
 always @(*) begin
     case (state)
         Sidle: state_next = (enable)?Swork:Sidle; 
-        Swork: state_next = (valid)?Sidle:Swork; 
+        Swork: state_next = (done)?Sdone:Swork; 
+        Sdone: state_next = (readout)?Sidle:Sdone;
         default: state_next = Sidle;
     endcase
 end
@@ -106,11 +111,11 @@ always @(posedge clk) begin
 end
 
 always @(*) begin
-    if(enable && state == Sidle) begin
+    if(state == Sidle) begin
         for(i = 0;i<8;i = i + 1) begin
-            data_next[i] = data_intput[i];
+            data_next[i] = (enable)?data_intput[i]:data[i]; // locked
         end
-    end else if(sorted_count == 4'd7 || state == Sidle) begin
+    end else if(done || state == Sdone) begin
         for(i = 0;i<8;i = i + 1) begin
             data_next[i] = data[i]; // locked
         end

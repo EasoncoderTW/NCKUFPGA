@@ -1,0 +1,3 @@
+/home/yoyo/work/Vitisproject/vitis_hw4/platform/zynq_fsbl/build/CMakeFiles/fsbl.elf.dir
+/home/yoyo/work/Vitisproject/vitis_hw4/platform/zynq_fsbl/build/CMakeFiles/edit_cache.dir
+/home/yoyo/work/Vitisproject/vitis_hw4/platform/zynq_fsbl/build/CMakeFiles/rebuild_cache.dir

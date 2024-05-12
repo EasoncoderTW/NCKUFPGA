@@ -13,7 +13,7 @@
 ## Problem1 – RGB LED(15%)
 
 ### Block Design Diagram
-![image1](/images/block_design_1.jpg)
+![image1](./images/block_design_1.jpg)
 
 ### 電路設計說明
 
@@ -21,7 +21,7 @@
 
 ## Problem2 – Sorting(15%)
 ### Block Design Diagram
-![image2](/images/block_design_2.jpg)
+![image2](./images/block_design_2.jpg)
 
 ### 電路設計說明
 - 使用c語言完成
@@ -45,26 +45,26 @@
 
 ### Block Design Diagram
 
-![image3](/images/block_design_3.jpg)
+![image3](./images/block_design_3.jpg)
 
 ### Implementation
 
-![image4](/images/Implementation.png)
+![image4](./images/Implementation.png)
 
 ### 電路設計說明
 - Arithmetic
     - 設計了三個input資訊(運算元A、運算元B、運算子)以及兩個output port(運算結果、overflow指示)，並且將其掛接到AXI Bus上的兩個記憶體位置。
-    ![image6](/images/image1.png)
+    ![image6](./images/image1.png)
     - 內部設計相當於化簡過後的ALU。
 - Sorting
     - 採用selection sort(與HW3-2的merge sort 不同)，並且善用硬體shift register 的特性完成sorting。
     - 由於計算需要一些時間，所以driver設計時需要以while loop作為檢查，確定記憶體讀值是正確的輸出結果(需要valid信號)。
     - 輸入:32bit(8個4bit數值，0~f)
     - 輸出:32bit(8個4bit數值，0~f)，由小到大排序。
-    ![image6](/images/image2.png)
+    ![image6](./images/image2.png)
 -  Parity Generator
     - 硬體直接將輸入的32個wire進行xor運算即可。
 
 - 針對不同的的硬體皆設有獨立的driver，並且在main.c中也有獨立的unit test供應體測試正確性。
 ### 測試結果
-![image5](/images/problem3_putty.png)
+![image5](./images/problem3_putty.png)
